@@ -1,5 +1,3 @@
-class AppExtension:
-    def init_app(self, app):
-        pass
+from flask_sqlalchemy import SQLAlchemy
 
-extension = AppExtension()
+db = SQLAlchemy()
