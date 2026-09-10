@@ -1,0 +1,2 @@
+class DevelopmentConfig:
+    DEBUG = True
