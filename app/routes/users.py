@@ -13,7 +13,11 @@ def new_user():
     if request.method == "POST":
         name = request.form["name"]
         email = request.form["email"]
-        create_user(name, email)
-        return redirect(url_for("users.user_home"))
+
+        try:
+            create_user(name, email)
+            return redirect(url_for("users.user_home"))
+        except ValueError as error:
+            return render_template("user_form.html", error=error)
 
     return render_template("user_form.html")

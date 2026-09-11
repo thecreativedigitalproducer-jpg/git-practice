@@ -6,6 +6,10 @@
 <body>
     <h1>Add User</h1>
 
+    {% if error %}
+        <p>{{ error }}</p>
+    {% endif %}
+
     <form method="post">
         <label>Name:</label>
         <input type="text" name="name">
