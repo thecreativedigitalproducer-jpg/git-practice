@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, url_for
-from app.services.user_service import get_all_users, create_user
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify
+from app.services.user_service import get_all_users, create_user, EmailAlreadyExists
 
 users = Blueprint("users", __name__)
 
@@ -21,3 +21,19 @@ def new_user():
             return render_template("user_form.html", error=error)
 
     return render_template("user_form.html")
+
+
+@users.route("/api/users", methods=["POST"])
+def api_create_user():
+    data = request.get_json()
+    name = data.get("name") if data else None
+    email = data.get("email") if data else None
+
+    try:
+        user = create_user(name, email)
+    except EmailAlreadyExists as error:
+        return jsonify({"error": "EMAIL_ALREADY_EXISTS", "message": str(error), "field": "email"}), 409
+    except ValueError as error:
+        return jsonify({"error": "VALIDATION_ERROR", "message": str(error)}), 400
+
+    return jsonify({"id": user.id, "name": user.name, "email": user.email}), 201

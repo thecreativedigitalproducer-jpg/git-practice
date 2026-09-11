@@ -4,13 +4,17 @@ from app.repositories.user_repository import get_all_users as repository_get_all
 from app.models.user import User
 
 
+class EmailAlreadyExists(Exception):
+    pass
+
+
 def get_all_users():
     return repository_get_all_users()
 
 
 def create_user(name, email):
-    name = name.strip()
-    email = email.strip()
+    name = (name or "").strip()
+    email = (email or "").strip()
 
     if not name:
         raise ValueError("Name is required.")
@@ -25,6 +29,6 @@ def create_user(name, email):
         db.session.commit()
     except IntegrityError:
         db.session.rollback()
-        raise ValueError("Email already exists.")
+        raise EmailAlreadyExists("Email already exists.")
 
     return user
