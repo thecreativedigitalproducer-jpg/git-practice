@@ -10,6 +10,7 @@ from app.models.ai_analysis_history import AIAnalysisHistory
 from app.routes.main import main
 from app.routes.users import users
 from app.routes.auth import auth
+from app.routes.tasks import tasks
 
 def create_app():
     app = Flask(__name__)
@@ -19,4 +20,5 @@ def create_app():
     app.register_blueprint(main)
     app.register_blueprint(users)
     app.register_blueprint(auth)
+    app.register_blueprint(tasks)
     return app
