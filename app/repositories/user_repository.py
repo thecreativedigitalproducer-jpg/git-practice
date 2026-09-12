@@ -6,3 +6,7 @@ def get_all_users():
 
 def save(user):
     db.session.add(user)
+
+
+def get_by_id(user_id):
+    return User.query.get(user_id)
