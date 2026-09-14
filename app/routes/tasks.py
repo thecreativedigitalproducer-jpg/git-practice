@@ -8,6 +8,11 @@ tasks = Blueprint("tasks", __name__)
 def api_create_task():
     data = request.get_json()
     user_id = data.get("user_id") if data else None  # TODO: Replace with authenticated user_id from JWT in v2.
+
+    if user_id is None:
+        return jsonify({"error": "VALIDATION_ERROR", "message": "user_id is required", "field": "user_id"}), 400
+    if not isinstance(user_id, int) or isinstance(user_id, bool):
+        return jsonify({"error": "VALIDATION_ERROR", "details": [{"field": "user_id", "message": "Input must be an integer."}]}), 422
     title = data.get("title") if data else None
     description = data.get("description") if data else None
 
