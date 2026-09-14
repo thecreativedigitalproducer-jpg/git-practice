@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.services.task_service import create_task_with_ai, UserNotFound
+from app.services.task_service import create_task_with_ai, UserNotFound, ActiveTaskLimitExceeded
 
 tasks = Blueprint("tasks", __name__)
 
@@ -20,6 +20,8 @@ def api_create_task():
         task, job = create_task_with_ai(user_id, title, description)
     except UserNotFound as error:
         return jsonify({"error": "USER_NOT_FOUND", "message": str(error)}), 404
+    except ActiveTaskLimitExceeded as error:
+        return jsonify({"error": "ACTIVE_TASK_LIMIT_EXCEEDED", "message": "You already have 10 active tasks. Complete or archive one to create a new task.", "limit": error.limit}), 409
     except ValueError as error:
         return jsonify({"error": "VALIDATION_ERROR", "message": str(error)}), 400
 
